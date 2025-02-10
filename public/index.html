@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Short but Complete Guide to Web Push Notifications</title>
+  </head>
+  <body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-3xl">
+      <!-- Header Section -->
+      <header class="text-center mb-12">
+        <h1 class="text-4xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+          Short but Complete Guide to Web Push Notifications
+        </h1>
+
+        <!-- CTAs -->
+        <div class="flex justify-center gap-4 mb-8">
+          <a
+            href="https://github.com/yourusername/web-push-demo"
+            class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+          >
+            See the Code
+          </a>
+          <a href="#" class="border-2 border-blue-600 text-blue-600 px-6 py-2 rounded-lg hover:bg-blue-50 transition-colors font-medium"> Read More Article </a>
+        </div>
+
+        <!-- Introduction -->
+        <div class="prose prose-blue mx-auto">
+          <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+            <p class="text-gray-600 mb-6 text-left">
+              Welcome to our hands-on guide to implementing web push notifications! In this interactive tutorial, you'll learn about the core concepts and APIs
+              that power web push notifications, and implement them step by step.
+            </p>
+
+            <div class="text-left mb-6">
+              <h4 class="text-gray-800 font-semibold mb-3">Key Concepts You'll Master:</h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                <div>
+                  <h5 class="text-blue-700 font-medium mb-2">Browser APIs</h5>
+                  <ul class="space-y-2 text-gray-600">
+                    <li class="flex items-start gap-2">
+                      <span class="text-blue-500 mt-1">•</span>
+                      <div>
+                        <span class="font-medium">Notifications API</span>
+                        <p class="text-sm">Request permission and display notifications</p>
+                      </div>
+                    </li>
+                    <li class="flex items-start gap-2">
+                      <span class="text-blue-500 mt-1">•</span>
+                      <div>
+                        <span class="font-medium">Service Workers</span>
+                        <p class="text-sm">Handle background push events</p>
+                      </div>
+                    </li>
+                    <li class="flex items-start gap-2">
+                      <span class="text-blue-500 mt-1">•</span>
+                      <div>
+                        <span class="font-medium">Push API</span>
+                        <p class="text-sm">Subscribe to push messages</p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 class="text-blue-700 font-medium mb-2">Technical Components</h5>
+                  <ul class="space-y-2 text-gray-600">
+                    <li class="flex items-start gap-2">
+                      <span class="text-blue-500 mt-1">•</span>
+                      <div>
+                        <span class="font-medium">VAPID Keys</span>
+                        <p class="text-sm">Secure server identification</p>
+                      </div>
+                    </li>
+                    <li class="flex items-start gap-2">
+                      <span class="text-blue-500 mt-1">•</span>
+                      <div>
+                        <span class="font-medium">Push Service</span>
+                        <p class="text-sm">Message delivery infrastructure</p>
+                      </div>
+                    </li>
+                    <li class="flex items-start gap-2">
+                      <span class="text-blue-500 mt-1">•</span>
+                      <div>
+                        <span class="font-medium">Subscription Objects</span>
+                        <p class="text-sm">Unique push message endpoints</p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="space-y-4">
+        <!-- Step 1: Request Permission -->
+        <div id="step-1" class="border rounded-lg p-6 mb-4">
+          <div class="flex justify-between items-start mb-4">
+            <h3 class="text-lg font-semibold">Step 1: Request Permission</h3>
+            <span id="permission-status" class="px-2 py-1 rounded-full text-sm font-medium"></span>
+          </div>
+
+          <div class="prose prose-blue max-w-none mb-6">
+            <p>Before sending any notifications, we need explicit permission from the user. This is a critical security feature of the web platform.</p>
+
+            <p>
+              When you click the button below, the browser will show its native permission prompt. This is handled by the Notifications API, which provides
+              three possible states:
+            </p>
+            <ul class="list-none space-y-2 ml-4">
+              <li class="flex items-start">
+                <span class="text-blue-500 mr-2">•</span>
+                <span>'default' - The user hasn't made a decision yet</span>
+              </li>
+              <li class="flex items-start">
+                <span class="text-blue-500 mr-2">•</span>
+                <span>'granted' - The user has allowed notifications</span>
+              </li>
+              <li class="flex items-start">
+                <span class="text-blue-500 mr-2">•</span>
+                <span>'denied' - The user has blocked notifications</span>
+              </li>
+            </ul>
+
+            <p class="mt-4">
+              <strong>Note:</strong> This permission state is persistent across browser sessions and can only be changed through the browser's settings.
+            </p>
+          </div>
+
+          <div class="mt-4 bg-gray-50 rounded-lg p-4">
+            <h4 class="text-sm font-semibold text-gray-700 mb-2">Related APIs:</h4>
+            <div class="space-y-3">
+              <div class="border-l-2 border-blue-200 pl-3">
+                <a
+                  href="https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-blue-600 hover:text-blue-800 font-medium text-sm"
+                >
+                  Notifications API
+                </a>
+                <p class="text-sm text-gray-600 mt-1">The main API for requesting notification permissions and creating notifications.</p>
+              </div>
+              <div class="border-l-2 border-blue-200 pl-3">
+                <a
+                  href="https://developer.mozilla.org/en-US/docs/Web/API/Notification/requestPermission"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-blue-600 hover:text-blue-800 font-medium text-sm"
+                >
+                  Notification.requestPermission()
+                </a>
+                <p class="text-sm text-gray-600 mt-1">Method used to request permission from the user.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <button data-action="requestPermission" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors w-full sm:w-auto">
+              Request Permission
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2: VAPID Keys -->
+        <div id="step-2" class="border rounded-lg p-6 mb-4">
+          <div class="flex justify-between items-start mb-4">
+            <h3 class="text-lg font-semibold">Step 2: VAPID Keys</h3>
+          </div>
+
+          <div class="prose prose-blue max-w-none mb-6">
+            <p>
+              VAPID (Voluntary Application Server Identification) is a security protocol that helps establish a trusted connection between your server and the
+              push service.
+            </p>
+
+            <div class="mb-4">
+              <p class="mb-2">How it works:</p>
+              <ol class="list-none space-y-2 ml-4">
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2">1.</span>
+                  <span>We generate a pair of keys: public and private</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2">2.</span>
+                  <span>The public key is used by the browser to create push subscriptions</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2">3.</span>
+                  <span>The private key is used by our server to sign push messages</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2">4.</span>
+                  <span>Push services verify the signature using our public key</span>
+                </li>
+              </ol>
+            </div>
+
+            <p>This ensures that only our server can send notifications to our users, preventing abuse from unauthorized sources. The keys are:</p>
+            <ul class="list-none space-y-2 ml-4">
+              <li class="flex items-start">
+                <span class="text-blue-500 mr-2">•</span>
+                <span>Application Server Key (public) - Shared with the browser</span>
+              </li>
+              <li class="flex items-start">
+                <span class="text-blue-500 mr-2">•</span>
+                <span>Private Key - Kept secure on our server</span>
+              </li>
+            </ul>
+
+            <p class="mt-4">We've already generated and configured these keys for this demo.</p>
+          </div>
+
+          <div class="mt-4 bg-gray-50 rounded-lg p-4">
+            <h4 class="text-sm font-semibold text-gray-700 mb-2">Related APIs:</h4>
+            <div class="space-y-3">
+              <div class="border-l-2 border-blue-200 pl-3">
+                <a
+                  href="https://datatracker.ietf.org/doc/html/rfc8292"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-blue-600 hover:text-blue-800 font-medium text-sm"
+                >
+                  VAPID Protocol
+                </a>
+                <p class="text-sm text-gray-600 mt-1">Voluntary Application Server Identification for Web Push.</p>
+              </div>
+              <div class="border-l-2 border-blue-200 pl-3">
+                <a
+                  href="https://developer.mozilla.org/en-US/docs/Web/API/Push_API#libraries_and_tools"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-blue-600 hover:text-blue-800 font-medium text-sm"
+                >
+                  Web Push Libraries
+                </a>
+                <p class="text-sm text-gray-600 mt-1">Tools for implementing web push on the server side.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Service Worker Registration -->
+        <div id="step-3" class="border rounded-lg p-6 mb-4">
+          <div class="flex justify-between items-start mb-4">
+            <h3 class="text-lg font-semibold">Step 3: Service Worker Registration</h3>
+          </div>
+
+          <div class="prose prose-blue max-w-none mb-6">
+            <p>Service Workers act as a proxy between your web app, the browser, and the network. For push notifications, they're essential because they:</p>
+            <ol class="list-none space-y-2 ml-4">
+              <li class="flex items-start">
+                <span class="text-blue-500 mr-2">1.</span>
+                <span>Run in the background, even when your web app is closed</span>
+              </li>
+              <li class="flex items-start">
+                <span class="text-blue-500 mr-2">2.</span>
+                <span>Receive push messages from the server</span>
+              </li>
+              <li class="flex items-start">
+                <span class="text-blue-500 mr-2">3.</span>
+                <span>Interact with the Notifications API to trigger notifications</span>
+              </li>
+            </ol>
+
+            <div class="mb-4">
+              <p class="mb-2">The registration process:</p>
+              <ol class="list-none space-y-2 ml-4">
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2">1.</span>
+                  <span>We register a JavaScript file (sw.js) as a Service Worker</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2">2.</span>
+                  <span>The browser downloads and activates this file</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2">3.</span>
+                  <span>The Service Worker sets up event listeners for push messages</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2">4.</span>
+                  <span>It stays active in the background, ready to handle notifications</span>
+                </li>
+              </ol>
+            </div>
+
+            <p>Our Service Worker is configured to:</p>
+            <ul class="list-none space-y-2 ml-4">
+              <li class="flex items-start">
+                <span class="text-blue-500 mr-2">•</span>
+                <span>Listen for push events</span>
+              </li>
+              <li class="flex items-start">
+                <span class="text-blue-500 mr-2">•</span>
+                <span>Process push message data</span>
+              </li>
+              <li class="flex items-start">
+                <span class="text-blue-500 mr-2">•</span>
+                <span>Use the Notifications API to show notifications</span>
+              </li>
+              <li class="flex items-start">
+                <span class="text-blue-500 mr-2">•</span>
+                <span>Handle notification click events</span>
+              </li>
+            </ul>
+
+            <!-- New Testing Section -->
+            <div class="mt-8 bg-gray-50 rounded-lg p-6 border border-gray-200">
+              <h4 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                Testing with DevTools
+                <span class="text-sm font-medium text-gray-500">(AVAILABLE AFTER STEP 3 COMPLETION)</span>
+              </h4>
+              <p class="mb-4">
+                After registering the Service Worker, you can test push notifications directly from Chrome DevTools:
+              </p>
+              <ol class="list-decimal ml-6 mb-6 space-y-2">
+                <li>Open Chrome DevTools (F12 or Right Click → Inspect)</li>
+                <li>Go to the Application tab</li>
+                <li>Select "Service Workers" in the left sidebar</li>
+                <li>Find the Push textbox</li>
+                <li>Paste the sample payload below and click "Push"</li>
+              </ol>
+
+              <div class="mb-6">
+                <img src="/test-push.png" alt="Chrome DevTools Push Testing Interface" class="rounded-lg shadow-md border border-gray-200 w-full"/>
+              </div>
+
+              <div class="bg-gray-900 rounded-lg p-4 mb-4">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-gray-400 text-sm">Sample Push Payload</span>
+                  <button 
+                    class="text-gray-400 hover:text-white text-sm"
+                    onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.textContent)"
+                  >
+                    Copy
+                  </button>
+                </div>
+                <pre class="text-blue-400 overflow-x-auto"><code>{
+  "title": "Live Broadcast",
+  "body": "Testing push notification from DevTools!"
+}</code></pre>
+              </div>
+
+              <p class="text-sm text-gray-600">
+                <span class="text-amber-600">💡 Tip:</span> You can modify the payload to test different notification content and behaviors.
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-4 bg-gray-50 rounded-lg p-4">
+            <h4 class="text-sm font-semibold text-gray-700 mb-2">Related APIs:</h4>
+            <div class="space-y-3">
+              <div class="border-l-2 border-blue-200 pl-3">
+                <a
+                  href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-blue-600 hover:text-blue-800 font-medium text-sm"
+                >
+                  Service Worker API
+                </a>
+                <p class="text-sm text-gray-600 mt-1">Background script that enables push notifications and offline functionality.</p>
+              </div>
+              <div class="border-l-2 border-blue-200 pl-3">
+                <a
+                  href="https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerContainer/register"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-blue-600 hover:text-blue-800 font-medium text-sm"
+                >
+                  ServiceWorkerContainer.register()
+                </a>
+                <p class="text-sm text-gray-600 mt-1">Method to register a service worker for your web app.</p>
+              </div>
+              <div class="border-l-2 border-blue-200 pl-3">
+                <a
+                  href="https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/showNotification"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-blue-600 hover:text-blue-800 font-medium text-sm"
+                >
+                  ServiceWorkerRegistration.showNotification()
+                </a>
+                <p class="text-sm text-gray-600 mt-1">Method to request the Notifications API to display a notification.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <button
+              data-action="registerServiceWorker"
+              class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors w-full sm:w-auto"
+            >
+              Register Service Worker
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 4: Subscribe to Push Notifications -->
+        <div id="step-4" class="border rounded-lg p-6 mb-4">
+          <div class="flex justify-between items-start mb-4">
+            <h3 class="text-lg font-semibold">Step 4: Subscribe to Push Notifications</h3>
+          </div>
+
+          <div class="prose prose-blue max-w-none mb-6">
+            <p>This step creates a push subscription by connecting multiple components:</p>
+
+            <div class="mb-4">
+              <p class="mb-2">1. Browser Push Service:</p>
+              <ul class="list-none space-y-2 ml-6">
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2">•</span>
+                  <span>Each browser has its own push service (e.g., Firefox Cloud Messaging, Chrome's FCM)</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2">•</span>
+                  <span>The push service maintains a connection to the browser</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2">•</span>
+                  <span>It receives messages from our server and forwards them to the right browser</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="mb-4">
+              <p class="mb-2">2. Subscription Creation:</p>
+              <ul class="list-none space-y-2 ml-6">
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2">•</span>
+                  <span>Uses our VAPID public key for authentication</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2">•</span>
+                  <span>Generates a unique endpoint URL at the push service</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2">•</span>
+                  <span>Creates encryption keys for secure message delivery</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="mb-4">
+              <p class="mb-2">3. The subscription object contains:</p>
+              <ul class="list-none space-y-2 ml-6">
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2">•</span>
+                  <span>endpoint: A unique URL where we'll send push messages</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2">•</span>
+                  <span>keys: Used to encrypt messages for security</span>
+                </li>
+              </ul>
+            </div>
+
+            <p>This subscription is then sent to our server for storage and future use.</p>
+
+            <!-- New highlighted sections -->
+            <div class="mt-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded">
+              <h4 class="text-amber-800 font-semibold mb-2">🤔 How is this different from Step 1 (Permission)?</h4>
+              <p class="text-amber-700">
+                While Step 1 requests general permission to show notifications, this step creates a specific channel for receiving push messages:
+              </p>
+              <ul class="list-disc ml-4 mt-2 text-amber-700">
+                <li>Notification Permission: Like getting permission to knock on someone's door</li>
+                <li>Push Subscription: Like getting a specific mailbox address where we can send messages</li>
+                <li>We need both: Permission to show notifications AND a way to receive push messages</li>
+              </ul>
+            </div>
+
+            <div class="mt-4 bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+              <h4 class="text-blue-800 font-semibold mb-2">🔍 Why urlBase64ToUint8Array?</h4>
+              <p class="text-blue-700">The VAPID public key needs to be converted from a base64 string to a Uint8Array because:</p>
+              <ul class="list-disc ml-4 mt-2 text-blue-700">
+                <li>Push subscription requires the application server key in raw binary format</li>
+                <li>We store and transmit the key in base64 format for easy handling</li>
+                <li>The conversion ensures the key is in the correct format for the Web Push protocol</li>
+              </ul>
+              <p class="text-blue-700 mt-2">
+                <a
+                  href="https://developer.mozilla.org/en-US/docs/Web/API/PushManager/subscribe#converting_vapid_key"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="underline"
+                >
+                  Learn more about VAPID key conversion
+                </a>
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-4 bg-gray-50 rounded-lg p-4">
+            <h4 class="text-sm font-semibold text-gray-700 mb-2">Related APIs:</h4>
+            <div class="space-y-3">
+              <div class="border-l-2 border-blue-200 pl-3">
+                <a
+                  href="https://developer.mozilla.org/en-US/docs/Web/API/Push_API"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-blue-600 hover:text-blue-800 font-medium text-sm"
+                >
+                  Push API
+                </a>
+                <p class="text-sm text-gray-600 mt-1">Enables push notifications from a server to a service worker.</p>
+              </div>
+              <div class="border-l-2 border-blue-200 pl-3">
+                <a
+                  href="https://developer.mozilla.org/en-US/docs/Web/API/PushManager/subscribe"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-blue-600 hover:text-blue-800 font-medium text-sm"
+                >
+                  PushManager.subscribe()
+                </a>
+                <p class="text-sm text-gray-600 mt-1">Method to subscribe for push notifications.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <button data-action="subscribe" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors w-full sm:w-auto">
+              Subscribe for Notifications
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 5: Test Push Notification -->
+        <div id="step-5" class="border rounded-lg p-6 mb-4">
+          <div class="flex justify-between items-start mb-4">
+            <h3 class="text-lg font-semibold">Step 5: Test Push Notification</h3>
+          </div>
+
+          <div class="prose prose-blue max-w-none mb-6">
+            <p>Let's test the complete push notification flow:</p>
+
+            <div class="mb-4">
+              <p class="mb-2">1. When you click the button:</p>
+              <ul class="list-none space-y-2 ml-6">
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2">•</span>
+                  <span>Our server prepares a push message</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2">•</span>
+                  <span>Signs it with our VAPID private key</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2">•</span>
+                  <span>Sends it to the push service endpoint</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="mb-4">
+              <p class="mb-2">2. Message Journey:</p>
+              <ul class="list-none space-y-2 ml-6">
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2">•</span>
+                  <span>Push service validates our signature</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2">•</span>
+                  <span>Forwards the message to the user's browser</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2">•</span>
+                  <span>Browser wakes up our Service Worker</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2">•</span>
+                  <span>Service Worker receives the push event</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2">•</span>
+                  <span>Creates and displays the notification</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="mb-4">
+              <p class="mb-2">3. The notification can include:</p>
+              <ul class="list-none space-y-2 ml-6">
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2">•</span>
+                  <span>Title and body text</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2">•</span>
+                  <span>Custom icons and badges</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2">•</span>
+                  <span>Action buttons</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2">•</span>
+                  <span>Click handlers for navigation</span>
+                </li>
+              </ul>
+            </div>
+
+            <p>Click the button below to see it all in action!</p>
+          </div>
+
+          <div class="mt-4 bg-gray-50 rounded-lg p-4">
+            <h4 class="text-sm font-semibold text-gray-700 mb-2">Related APIs:</h4>
+            <div class="space-y-3">
+              <div class="border-l-2 border-blue-200 pl-3">
+                <a
+                  href="https://developer.mozilla.org/en-US/docs/Web/API/PushEvent"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-blue-600 hover:text-blue-800 font-medium text-sm"
+                >
+                  Push Event
+                </a>
+                <p class="text-sm text-gray-600 mt-1">Event fired when a push message is received by the service worker.</p>
+              </div>
+              <div class="border-l-2 border-blue-200 pl-3">
+                <a
+                  href="https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/showNotification"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-blue-600 hover:text-blue-800 font-medium text-sm"
+                >
+                  showNotification()
+                </a>
+                <p class="text-sm text-gray-600 mt-1">Method to display a notification from a service worker.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <button data-action="sendNotification" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors w-full sm:w-auto">
+              Send Test Notification
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/state.js"></script>
+    <script type="module" src="/ui.js"></script>
+  </body>
+</html>

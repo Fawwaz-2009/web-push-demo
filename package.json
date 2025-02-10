@@ -1,0 +1,19 @@
+{
+  "name": "web-push",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "generate-keys": "web-push generate-vapid-keys --json > vapid-keys.json"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.13.8",
+    "dotenv": "^16.4.7",
+    "hono": "^4.6.20",
+    "web-push": "^3.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.17",
+    "@types/web-push": "^3.6.4",
+    "tsx": "^4.7.1"
+  }
+}
